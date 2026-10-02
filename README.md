@@ -42,7 +42,7 @@ The project uses a Retrieval-Augmented Generation (RAG) approach. Documents are 
 
 | Library + Chat (Home) | Answer with Page Citation |
 |---|---|
-| (docs/screenshots/home.png) *(placeholder)* | (docs/screenshots/answer.png) *(placeholder)* |
+| ![Home](docs/screenshots/home.png) | ![Chats](docs/screenshots/answer.png) |
 
 ---
 
