@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ app_name }} – Ask questions about your PDFs</title>
+<meta name="description" content="Upload your notes, textbooks or papers and get answers with the exact page they came from.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2312203A'/%3E%3Crect x='9' y='6' width='14' height='20' rx='2' fill='%23fff'/%3E%3Crect x='9' y='15' width='14' height='5' fill='%23FFD93D'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('pdfbot-theme'); } catch (e) {}
+    if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#12203A"/><rect x="9" y="6" width="14" height="20" rx="2" fill="#fff"/><rect x="9" y="15" width="14" height="5" fill="#FFD93D"/><rect x="12" y="10" width="8" height="1.6" rx=".8" fill="#12203A" opacity=".55"/><rect x="12" y="22" width="5" height="1.6" rx=".8" fill="#12203A" opacity=".55"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V6a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-library" viewBox="0 0 24 24"><path d="M4 4.5h4v15H4zM10 4.5h4v15h-4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16.2 5.6l3.8-1 3 14.3-3.8 1z" transform="translate(-1.6 0)" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3L12 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.5M12 17.2v.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-new" viewBox="0 0 24 24"><path d="M12 20h8M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<a class="skip" href="#q">Skip to message box</a>
+
+<div class="app" id="app">
+
+  <!-- Sidebar: library -->
+  <aside class="side" id="side" aria-label="PDF library">
+    <div class="side-head">
+      <a class="brand" href="/" aria-label="{{ app_name }} home">
+        <svg class="mark" width="30" height="30" aria-hidden="true"><use href="#i-mark"/></svg>
+        <span>{{ app_name }}</span>
+      </a>
+      <button class="icon-btn only-mobile" id="closeSide" type="button" aria-label="Close library">
+        <svg width="20" height="20" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <button class="btn primary block" id="addBtn" type="button">
+      <svg width="18" height="18" aria-hidden="true"><use href="#i-plus"/></svg>
+      Add PDFs
+    </button>
+    <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple hidden>
+
+    <div class="side-scroll">
+      <section id="jobsWrap" hidden aria-label="Uploads in progress">
+        <h2 class="side-h">Adding</h2>
+        <ul class="jobs" id="jobs"></ul>
+      </section>
+
+      <section aria-label="Your PDFs">
+        <h2 class="side-h">Library <span class="side-count" id="libCount"></span></h2>
+        <ul class="docs" id="lib"></ul>
+        <p class="side-empty" id="libEmpty">No PDFs yet. Add one to start asking questions.</p>
+      </section>
+    </div>
+
+    <div class="side-foot">
+      <p class="totals" id="totals"></p>
+      <div class="foot-actions">
+        <button class="text-btn danger" id="clearLib" type="button" hidden>Clear library</button>
+        <button class="icon-btn" id="theme" type="button" aria-label="Switch theme">
+          <svg width="20" height="20" aria-hidden="true"><use id="themeIcon" href="#i-moon"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="top">
+      <button class="btn ghost only-mobile" id="openSide" type="button" aria-controls="side" aria-expanded="false">
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-library"/></svg>
+        Library <span class="pill" id="topCount">0</span>
+      </button>
+      <p class="top-status" id="topStatus"></p>
+      <button class="btn ghost" id="newChat" type="button" hidden>
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-new"/></svg>
+        <span class="lbl">New chat</span>
+      </button>
+    </header>
+
+    <div class="banner" id="banner" role="alert" hidden>
+      <svg width="20" height="20" aria-hidden="true"><use href="#i-alert"/></svg>
+      <p id="bannerText"></p>
+    </div>
+
+    <!-- Welcome / no PDFs yet -->
+    <section class="welcome" id="welcome" aria-labelledby="welcomeTitle" hidden>
+      <div class="welcome-in">
+        <h1 id="welcomeTitle">Ask your PDFs. Get answers with page numbers.</h1>
+        <p class="lede">Add lecture notes, textbooks or papers. {{ app_name }} answers only from what is in them, and shows where it looked.</p>
+
+        <button class="drop" id="drop" type="button" aria-describedby="dropHint">
+          <svg class="drop-ico" width="56" height="64" viewBox="0 0 56 64" aria-hidden="true">
+            <path d="M8 3h28l14 14v42a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+            <path d="M36 3v14h14" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+            <rect x="13" y="30" width="30" height="9" fill="#FFD93D"/>
+            <path d="M14 24h16M14 46h22M14 52h12" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" opacity=".6"/>
+          </svg>
+          <span class="drop-title">Drop PDFs here</span>
+          <span class="drop-sub">or <span class="drop-link">browse your files</span></span>
+          <span class="drop-hint" id="dropHint">Up to <span data-max-docs>20</span> PDFs, <span data-max-mb>50</span> MB each. Scanned images are not supported.</span>
+        </button>
+        <p class="drop-err" id="dropErr" role="alert"></p>
+
+        <ol class="how" aria-label="How it works">
+          <li><b>Add</b> your PDFs. They are read and indexed on this computer.</li>
+          <li><b>Ask</b> in plain language, in English or Hindi.</li>
+          <li><b>Check</b> the page shown under each answer.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Chat -->
+    <section class="chat" id="chat" hidden aria-label="Conversation">
+      <div class="log" id="log" role="log" aria-live="polite" aria-relevant="additions">
+        <div class="log-in" id="logIn">
+          <div class="intro" id="intro">
+            <h1>What do you want to know?</h1>
+            <p class="lede">Answers come only from your PDFs. Try one of these or write your own.</p>
+            <div class="chips" id="chips"></div>
+          </div>
+        </div>
+      </div>
+      <button class="jump" id="jump" type="button" aria-label="Jump to latest message" hidden>
+        <svg width="20" height="20" aria-hidden="true"><use href="#i-down"/></svg>
+      </button>
+
+      <div class="composer-wrap">
+        <form class="composer" id="composer" autocomplete="off">
+          <label class="sr-only" for="q">Your question</label>
+          <textarea id="q" rows="1" maxlength="2000" placeholder="Ask a question about your PDFs"></textarea>
+          <span class="count" id="count" aria-hidden="true"></span>
+          <button class="send" id="send" type="submit" aria-label="Send question">
+            <svg width="20" height="20" aria-hidden="true"><use href="#i-send"/></svg>
+          </button>
+        </form>
+        <p class="composer-hint">Enter to send. Shift+Enter for a new line.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="veil" id="veil" hidden aria-hidden="true"><p>Drop PDFs to add them</p></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<dialog class="dialog" id="dialog" aria-labelledby="dialogTitle">
+  <form method="dialog">
+    <h2 id="dialogTitle">Clear your library?</h2>
+    <p id="dialogText">All PDFs will be removed from {{ app_name }}. You can add them again later.</p>
+    <div class="dialog-actions">
+      <button class="btn ghost" value="cancel" id="dialogCancel">Cancel</button>
+      <button class="btn danger" value="ok" id="dialogOk">Clear library</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
