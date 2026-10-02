@@ -294,7 +294,6 @@ Contributions are welcome.
 
 - 🐙 GitHub: [github.com/ajya97](https://github.com/ajya97)
 - 💼 LinkedIn: [linkedin.com/in/ajya97](https://www.linkedin.com/in/ajya97)
-- 🧠 Portfolio: [ajya97.github.io/mini-project/port.html](https://ajya97.github.io/mini-project/port.html)
 
 ---
 
