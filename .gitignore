@@ -1,7 +1,6 @@
 __pycache__/
 *.pyc
 .env
-.myvenv/
 myvenv/
 data/uploads/*
 !data/uploads/.gitkeep
