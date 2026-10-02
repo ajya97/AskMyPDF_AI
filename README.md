@@ -4,13 +4,12 @@
 
 **Upload your PDFs. Ask questions. Get answers grounded in your documents, with the page cited.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://askpdfai-wr09.onrender.com/)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Backend-Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![OpenRouter](https://img.shields.io/badge/LLM-OpenRouter-6467F2?style=for-the-badge)](https://openrouter.ai/)
 [![RAG](https://img.shields.io/badge/Approach-RAG-orange?style=for-the-badge)](#-how-it-works)
 
-[🚀 Live Demo](https://askpdfai-wr09.onrender.com/) · [📦 Repository](https://github.com/ajya97/AskMyPDF_AI) · [🐛 Report a Bug](https://github.com/ajya97/AskMyPDF_AI/issues)
+[📦 Repository](https://github.com/ajya97/AskMyPDF_AI) · [🐛 Report a Bug](https://github.com/ajya97/AskMyPDF_AI/issues)
 
 </div>
 
@@ -37,20 +36,9 @@ The project uses a Retrieval-Augmented Generation (RAG) approach. Documents are 
 
 ---
 
-## 🖥️ Live Demo
-
-| | Link |
-|---|---|
-| 🚀 **Deployed App** | [https://askpdfai-wr09.onrender.com/](https://askpdfai-wr09.onrender.com/) |
-| 📦 **GitHub Repository** | [https://github.com/ajya97/AskMyPDF_AI](https://github.com/ajya97/AskMyPDF_AI) |
-
-> ⏳ The first PDF upload can be slow because the embedding model is downloaded once. If the deployment is hosted on a free tier, it may also take time to wake up.
-
----
-
 ## 📸 Screenshots
 
-> Screenshots have not been added yet. Replace the placeholders below with real captures of the app.
+> Screenshots have not been added yet. Replace the placeholders below with real captures of the app running locally.
 
 | Library + Chat (Home) | Answer with Page Citation |
 |---|---|
@@ -117,7 +105,6 @@ flowchart TD
 | **AI / RAG** | Embedding model (about 400 MB, downloaded on first use), vector store, RAG chain in `src/` |
 | **LLM Provider** | OpenRouter (via `LLM_API_KEY`) |
 | **Storage** | In-memory library (cleared on restart); upload directory at `data/uploads/` |
-| **Deployment** | Render (inferred from the `onrender.com` domain) |
 | **Specific libraries** | Not specified, see `requirements.txt` |
 
 ---
@@ -177,7 +164,7 @@ pip install -r requirements.txt
 
 ## 🔐 Environment Variables
 
-Create a `.env` file in the project root. The original setup notes describe copying a `.env.example` template, so use it if it exists in your checkout.
+Create a `.env` file in the project root. If a `.env.example` template exists in your checkout, copy it to `.env` and fill in the values.
 
 ```env
 LLM_API_KEY=your_openrouter_api_key
@@ -265,11 +252,7 @@ No automated test suite is currently present in the repository. Manual testing f
 
 ## 🚀 Deployment
 
-The app is live at [askpdfai-wr09.onrender.com](https://askpdfai-wr09.onrender.com/), and the domain suggests it is hosted on **Render**.
-
-- **Required environment variable:** `LLM_API_KEY`
-- **Build / start commands:** Not specified
-- **Containerization (Docker) / CI/CD:** none present in the repository
+This project is **not currently deployed**. It is meant to be run locally by following the [Installation](#️-installation) and [Running Locally](#️-running-locally) steps above.
 
 ---
 
@@ -283,6 +266,7 @@ The app is live at [askpdfai-wr09.onrender.com](https://askpdfai-wr09.onrender.c
 - 📈 Retrieval and answer-quality evaluation
 - 🔐 Authentication and per-user libraries
 - 🐳 Dockerfile and CI/CD workflow
+- 🌐 Public deployment
 
 ---
 
